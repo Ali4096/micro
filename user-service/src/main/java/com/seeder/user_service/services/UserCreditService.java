@@ -1,6 +1,5 @@
 package com.seeder.user_service.services;
 
-import com.seeder.user_service.entities.User;
 import com.seeder.user_service.entities.UserCredit;
 import com.seeder.user_service.rapositories.UserCreditRepository;
 import org.springframework.beans.factory.annotation.Autowired;
