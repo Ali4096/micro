@@ -5,8 +5,7 @@ import com.seeder.user_service.services.UserCreditService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserCreditTest {
 
@@ -22,7 +21,6 @@ public class UserCreditTest {
     @Test
     void isCreditGreaterThanAmount_shouldReturnTrue_whenAmountIsGreater() {
         // Arrange: Create a UserCredit object with amount 100.0
-
 
         // Act: Check if the UserCredit's amount is greater than 50.0
         boolean result = userCreditService.isCreditGreaterThanAmount(userCredit, 50.0);
@@ -42,4 +40,7 @@ public class UserCreditTest {
         // Assert: The result should be false since 30.0 < 50.0
         assertFalse(result);
     }
+
+
+
 }
