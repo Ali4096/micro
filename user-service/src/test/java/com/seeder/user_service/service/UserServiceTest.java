@@ -1,7 +1,12 @@
 package com.seeder.user_service.service;
 
 import com.seeder.user_service.dtos.UserDTO;
+import com.seeder.user_service.dtos.UserWithOnlyIdDTO;
 import com.seeder.user_service.entities.User;
+import com.seeder.user_service.entities.UserCredit;
+import com.seeder.user_service.exceptions.ServiceException;
+import com.seeder.user_service.exceptions.UserAlreadyExistException;
+import com.seeder.user_service.exceptions.UserNotFoundException;
 import com.seeder.user_service.rapositories.UserRepository;
 import com.seeder.user_service.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,100 +15,170 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.mockito.Mockito.*;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private ModelMapper modelMapper;
+
     @InjectMocks
     private UserService userService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
+    private UserDTO userDTO;
     private User user;
-
-    private UserDTO userdto;
+    private UserCredit userCredit;
 
     @BeforeEach
     void setUp() {
-        // Initialize the mocks and create the test user
         MockitoAnnotations.openMocks(this);
-        user = new User(1L, "testUser", "password123","", null);
-        userdto = modelMapper.map(user,UserDTO.class);
 
+        // Set up a UserDTO and a User for testing
+        userDTO = new UserDTO();
+        userDTO.setUsername("testUser");
+        userDTO.setEmail("test@example.com");
+
+        userCredit = new UserCredit();
+        user = new User();
+        user.setUsername("testUser");
+        user.setEmail("test@example.com");
+        user.setUserCredit(userCredit);
     }
 
     @Test
-    void registerUserTest_shouldRegisterUser_whenUserDoesNotExist() {
-        // Arrange: Define mock behavior for the repository
-        when(userRepository.existsByUsername(user.getUsername())).thenReturn(false);   //Use this methods
-        when(userRepository.save(user)).thenReturn(user);     //USe this methods
+    void registerUser_shouldThrowIllegalArgumentException_whenUsernameIsNull() {
+        userDTO.setUsername(null);
 
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.registerUser(userDTO);
+        });
 
-        // Act: Call the method under test
-        User result = userService.registerUser(userdto);
+        assertEquals("Username is required", exception.getMessage());
+    }
 
-        // Assert: Check if the result is as expected
-        assertNotNull(result);
-        assertEquals(user.getUsername(), result.getUsername());
-        assertEquals(user.getPassword(), result.getPassword());
+    @Test
+    void registerUser_shouldThrowIllegalArgumentException_whenUsernameIsEmpty() {
+        userDTO.setUsername(" ");
 
-        // Verify that repository methods were called
-        verify(userRepository).existsByUsername(user.getUsername());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            userService.registerUser(userDTO);
+        });
+
+        assertEquals("Username is required", exception.getMessage());
+    }
+
+    @Test
+    void registerUser_shouldThrowUserAlreadyExistException_whenUsernameExists() {
+        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.of(user));
+
+        UserAlreadyExistException exception = assertThrows(UserAlreadyExistException.class, () -> {
+            userService.registerUser(userDTO);
+        });
+
+        assertEquals("User Name already exists", exception.getMessage());
+    }
+
+    @Test
+    void registerUser_shouldThrowUserAlreadyExistException_whenEmailExists() {
+        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.of(user));
+
+        UserAlreadyExistException exception = assertThrows(UserAlreadyExistException.class, () -> {
+            userService.registerUser(userDTO);
+        });
+
+        assertEquals("Email already exists", exception.getMessage());
+    }
+
+    @Test
+    void registerUser_shouldSaveUser_whenValid() {
+        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.empty());
+        when(modelMapper.map(userDTO, User.class)).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
+
+        User savedUser = userService.registerUser(userDTO);
+
+        assertNotNull(savedUser);
+        assertEquals(user.getUsername(), savedUser.getUsername());
         verify(userRepository).save(user);
+        verify(userRepository).findByUsername(userDTO.getUsername());
+        verify(userRepository).findByEmail(userDTO.getEmail());
     }
 
     @Test
-    void registerUserTest_shouldThrowException_whenUserAlreadyExists() {
-        // Arrange: Define mock behavior for the repository
-        when(userRepository.existsByUsername(user.getUsername())).thenReturn(true);  //Use this method
+    void registerUser_shouldThrowServiceException_whenUnexpectedErrorOccurs() {
+        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.empty());
+        when(modelMapper.map(userDTO, User.class)).thenReturn(user);
+        when(userRepository.save(user)).thenThrow(new RuntimeException("Database error"));
 
-        // Act & Assert: Check if an exception is thrown
-        assertThrows(IllegalArgumentException.class, () -> userService.registerUser(userdto));
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            userService.registerUser(userDTO);
+        });
 
-        // Verify that repository methods were called
-        verify(userRepository).existsByUsername(user.getUsername());
-        verify(userRepository, never()).save(any(User.class)); // save shouldn't be called
+        assertEquals("Some unexpected error occurred", exception.getMessage());
     }
 
     @Test
-    void validateUser_shouldReturnTrue_whenUserExists() {
-        // Arrange: Mock the behavior of the repository
-        when(userRepository.existsByUsername(user.getUsername())).thenReturn(true);
-        when(userRepository.existsById(user.getId())).thenReturn(true);
+    void registerUser_shouldSetUserCreditProperly_whenUserCreditIsNotNull() {
+        // Arrange: Set user credit in DTO
+        userDTO.setUserCredit(new UserCredit());
+        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.empty());
+        when(modelMapper.map(userDTO, User.class)).thenReturn(user);
+        when(userRepository.save(user)).thenReturn(user);
 
-        // Act: Call the validateUser method
-        UserDTO result = userService.validateUser(userdto);
+        // Act
+        User savedUser = userService.registerUser(userDTO);
 
-        // Assert: The result should be true since the user exists
+        // Assert
+        assertNotNull(savedUser);
+        assertNotNull(savedUser.getUserCredit());
+        assertEquals(user, savedUser.getUserCredit().getUser());
+    }
+
+    @Test
+    void validateUserById_shouldThrowUserNotFoundException_whenUserDoesNotExist() {
+        Long userId = 1L;
+
+        // Mock the userRepository to return an empty Optional
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // Assert that the UserNotFoundException is thrown
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> {
+            userService.validateUserById(userId);
+        });
+
+        assertEquals("User not exist", exception.getMessage());
+    }
+
+    @Test
+    void validateUserById_shouldReturnUserWithOnlyIdDTO_whenUserExists() {
+        Long userId = 1L;
+
+        // Mock the userRepository to return a user
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // Mock the modelMapper to return the DTO
+        UserWithOnlyIdDTO userWithOnlyIdDTO = new UserWithOnlyIdDTO();
+        userWithOnlyIdDTO.setId(user.getId());
+        when(modelMapper.map(user, UserWithOnlyIdDTO.class)).thenReturn(userWithOnlyIdDTO);
+
+        // Call the method and assert the result
+        UserWithOnlyIdDTO result = userService.validateUserById(userId);
+
         assertNotNull(result);
-        assertEquals(user.getUsername(), result.getUsername());
-
-        // Verify the interaction with the repository
-        verify(userRepository).existsByUsername(userdto.getUsername());
+        assertEquals(user.getId(), result.getId());
+        verify(userRepository).findById(userId);
+        verify(modelMapper).map(user, UserWithOnlyIdDTO.class);
     }
-
-    // Test case: User does not exist
-    @Test
-    void validateUser_shouldReturnFalse_whenUserDoesNotExist() {
-        // Arrange: Mock the behavior of the repository
-        when(userRepository.existsByUsername(userdto.getUsername())).thenReturn(false);
-
-        // Act: Call the validateUser method
-        UserDTO result = userService.validateUser(userdto);
-
-        // Assert: The result should be false since the user doesn't exist
-        assertNotNull(result);
-        assertEquals(user.getUsername(), result.getUsername());
-
-        // Verify the interaction with the repository
-        verify(userRepository).existsByUsername(userdto.getUsername());
-    }
-
 }

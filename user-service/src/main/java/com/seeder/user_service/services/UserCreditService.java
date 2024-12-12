@@ -1,7 +1,11 @@
 package com.seeder.user_service.services;
 
+import com.seeder.user_service.entities.User;
 import com.seeder.user_service.entities.UserCredit;
+import com.seeder.user_service.exceptions.AmountExhaustedException;
+import com.seeder.user_service.exceptions.UserNotFoundException;
 import com.seeder.user_service.rapositories.UserCreditRepository;
+import com.seeder.user_service.rapositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +17,24 @@ public class UserCreditService {
     @Autowired
     private UserCreditRepository userCreditRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
-    public boolean isCreditGreaterThanAmount(UserCredit userCredit, double amount) {
-        if (userCredit == null) {
-            return false;
+
+    public UserCredit isCreditSufficient(long userId, double amount) {
+        // Fetch user details
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new UserNotFoundException("User does not exist"));
+
+        // Validate user credit
+        if (user.getUserCredit().getBalance() < amount) {
+            throw new AmountExhaustedException("Insufficient credit balance for the requested amount");
         }
-        return userCredit.getBalance() > amount;
+
+        // Return true if validation passes
+        return user.getUserCredit();
     }
+
 
 
     // Method to deduct a specified amount from the user's balance
@@ -49,7 +64,8 @@ public class UserCreditService {
             userCreditRepository.save(userCredit1);
             return true; // Success: Deduction was successful
         } else {
-            return false; // Failure: Insufficient balance
+            throw new AmountExhaustedException("Insufficient credit balance for the requested amount");
         }
     }
+
 }
