@@ -1,5 +1,6 @@
 package com.seeder.cashkick_service.client;
 
+import com.seeder.cashkick_service.dtos.ContractDTO;
 import com.seeder.cashkick_service.dtos.UserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public interface ContractClient {
     String getHome();
 
     @GetMapping("/contracts/validate")
-    ResponseEntity<String> validateContracts(@RequestParam("contractIds") List<Long> contractIds);
+    ResponseEntity<List<ContractDTO>> validateContracts(@RequestParam("contractIds") List<Long> contractIds);
 
     @PostMapping("/contracts/make-pending")
     ResponseEntity<String> allContractsPending(@RequestParam("contractIds") List<Long> contractIds);
