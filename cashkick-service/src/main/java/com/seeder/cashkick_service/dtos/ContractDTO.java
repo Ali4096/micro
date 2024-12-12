@@ -2,11 +2,13 @@ package com.seeder.cashkick_service.dtos;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@Getter
 public class ContractDTO {
 
     private Integer id; // Typically no validation for ID, as it's auto-generated
@@ -66,5 +68,9 @@ public class ContractDTO {
         ACTIVE,
         INACTIVE,
         PENDING,
+    }
+
+    public Double getContractAmount() {
+        return contractAmount;
     }
 }

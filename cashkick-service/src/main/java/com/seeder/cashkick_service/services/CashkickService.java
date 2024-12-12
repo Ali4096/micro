@@ -4,6 +4,7 @@ package com.seeder.cashkick_service.services;
 import com.seeder.cashkick_service.client.ContractClient;
 import com.seeder.cashkick_service.client.UserClient;
 import com.seeder.cashkick_service.dtos.CashkickDTO;
+import com.seeder.cashkick_service.dtos.ContractDTO;
 import com.seeder.cashkick_service.dtos.UserDTO;
 import com.seeder.cashkick_service.entities.Cashkick;
 import com.seeder.cashkick_service.repositories.CashkickRepository;
@@ -23,6 +24,7 @@ public class CashkickService {
     private final ContractClient contractClient;
     private final ModelMapper modelMapper;
     private final CashkickRepository cashkickRepository;
+
 
     public CashkickService(UserClient userClient, ContractClient contractClient, ModelMapper modelMapper, CashkickRepository cashkickRepository) {
         this.userClient = userClient;
@@ -66,28 +68,44 @@ public class CashkickService {
     }
 
     void makeAllContractsPending(List<Long> contrctIda){
-        contractClient.allContractsPending(contrctIda);
+        ResponseEntity response =  contractClient.allContractsPending(contrctIda);
+        if(response.getStatusCode() != HttpStatus.OK){
+            throw new IllegalArgumentException("Cannot make all Contracts Pending");
+        }
     }
 
-    void validateContracts(List<Long> contrctIda){
-        contractClient.allContractsPending(contrctIda);
+    public List<ContractDTO> validateContracts(List<Long> contractIds) {
+        ResponseEntity<List<ContractDTO>> response = contractClient.validateContracts(contractIds);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("Contracts Invalid");
+        }
+        return response.getBody();
     }
 
 
-    void createCashKick(CashkickDTO cashkickDTO){
+    public void createCashKick(CashkickDTO cashkickDTO){
         UserDTO userDTO = new UserDTO(cashkickDTO.getUser_id());
         //validate user
         validateUser(userDTO);
 
         //Validate cashkicks if it is in pending
-        validateContracts(cashkickDTO.getContractIds());
+        List<ContractDTO> contractDTOS = validateContracts(cashkickDTO.getContractIds());
+
         //Add Total Sum
+        double totalAmount = contractDTOS.stream()
+                .mapToDouble(contractDTO -> contractDTO.getContractAmount())  // Extract the double values
+                .sum();  // Sum the values
 
         //Deduct credit from user
         deductCredit(cashkickDTO.getUser_id(),cashkickDTO.getTotalReceived());
 
         //Make all the contracts status pending
         makeAllContractsPending(cashkickDTO.getContractIds());
+
+        Cashkick cashkick = modelMapper.map(cashkickDTO,Cashkick.class);
+
+        cashkickRepository.save(cashkick);
 
     }
 
