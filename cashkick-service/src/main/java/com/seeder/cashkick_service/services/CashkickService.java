@@ -88,6 +88,8 @@ public class CashkickService {
         //Make all the contracts status pending
         makeAllContractsPending(cashkickDTO.getContractIds());
 
+        //Update all the contracts
+
     }
 
 
