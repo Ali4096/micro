@@ -15,7 +15,6 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
 
     @JsonIgnore
@@ -28,6 +27,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     UserCredit userCredit;
+
 
 
 }

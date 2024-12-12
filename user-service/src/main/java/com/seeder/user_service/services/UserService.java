@@ -1,10 +1,12 @@
 package com.seeder.user_service.services;
 
 import com.seeder.user_service.dtos.UserDTO;
+import com.seeder.user_service.dtos.UserWithOnlyIdDTO;
 import com.seeder.user_service.entities.User;
 import com.seeder.user_service.entities.UserCredit;
 import com.seeder.user_service.exceptions.ServiceException;
 import com.seeder.user_service.exceptions.UserAlreadyExistException;
+import com.seeder.user_service.exceptions.UserNotFoundException;
 import com.seeder.user_service.rapositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -68,16 +70,25 @@ public class UserService {
     public UserDTO validateUser(UserDTO userDTO) {
         // Check if the username exists in the repository
         if (!userRepository.existsByUsername(userDTO.getUsername())) {
-            throw new IllegalArgumentException("User does not exist.");
+            throw new UserNotFoundException("User does not exist.");
         }
 
         // Fetch the user entity from the repository
         User user = userRepository.findByUsername(userDTO.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("User does not exist."));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist."));
 
         // Map the User entity back to UserDTO and return
         return modelMapper.map(user, UserDTO.class);
     }
 
+
+    public UserWithOnlyIdDTO validateUserById(Long userid) {
+        Optional<User> user = userRepository.findById(userid);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("User not exist");
+        } else {
+            return modelMapper.map(user.get(), UserWithOnlyIdDTO.class);
+        }
+    }
 
 }
