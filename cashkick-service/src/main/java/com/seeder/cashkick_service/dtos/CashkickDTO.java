@@ -27,7 +27,7 @@ public class CashkickDTO {
 
 
     @NotNull(message = "user cannot be null")
-    private Long user_id;
+    private Long userId;
 
     // Instead of mapping full contracts, just store the contract IDs (as a list of integers)
     @NotNull(message = "contracts cannot be null")
@@ -53,9 +53,7 @@ public class CashkickDTO {
         return termLength;
     }
 
-    public Long getUser_id() {
-        return user_id;
-    }
+
 
     public List<Long> getContractIds() {
         return contractIds;
@@ -88,4 +86,36 @@ public class CashkickDTO {
 //    public LocalDate getMaturityDateAsEntity() {
 //        return this.maturityDate == null ? null : LocalDate.parse((CharSequence) this.maturityDate, DateTimeFormatter.ISO_LOCAL_DATE);
 //    }
+
+    public void setCashkickName(String cashkickName) {
+        this.cashkickName = cashkickName;
+    }
+
+    public void setCashkickStatus(String cashkickStatus) {
+        this.cashkickStatus = cashkickStatus;
+    }
+
+    public void setMaturityDate(String maturityDate) {
+        this.maturityDate = maturityDate;
+    }
+
+    public void setTotalReceived(Double totalReceived) {
+        this.totalReceived = totalReceived;
+    }
+
+    public void setTermLength(Integer termLength) {
+        this.termLength = termLength;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setContractIds(List<Long> contractIds) {
+        this.contractIds = contractIds;
+    }
 }

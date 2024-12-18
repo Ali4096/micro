@@ -10,5 +10,4 @@ import java.util.List;
 public interface CashkickRepository extends JpaRepository<Cashkick,Long> {
 
     List<Cashkick> findAllByUserId(Long userId);
-
 }
