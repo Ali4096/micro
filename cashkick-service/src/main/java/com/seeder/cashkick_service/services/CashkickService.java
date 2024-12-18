@@ -85,7 +85,7 @@ public class CashkickService {
 
 
     public void createCashKick(CashkickDTO cashkickDTO){
-        UserDTO userDTO = new UserDTO(cashkickDTO.getUser_id());
+        UserDTO userDTO = new UserDTO(cashkickDTO.getUserId());
         //validate user
         validateUser(userDTO);
 
@@ -98,7 +98,7 @@ public class CashkickService {
                 .sum();  // Sum the values
 
         //Deduct credit from user
-        deductCredit(cashkickDTO.getUser_id(),cashkickDTO.getTotalReceived());
+        deductCredit(cashkickDTO.getUserId(),cashkickDTO.getTotalReceived());
 
         //Make all the contracts status pending
         makeAllContractsPending(cashkickDTO.getContractIds());

@@ -21,8 +21,13 @@ public class UserDTO {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public UserDTO(Long id) {
         this.id = id;
     }
+
 }
 

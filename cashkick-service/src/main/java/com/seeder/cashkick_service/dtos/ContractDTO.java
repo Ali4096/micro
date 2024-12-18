@@ -129,4 +129,64 @@ public class ContractDTO {
     public List<Long> getCashkickIds() {
         return cashkickIds;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setContractName(String contractName) {
+        this.contractName = contractName;
+    }
+
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setPaymentFrequency(String paymentFrequency) {
+        this.paymentFrequency = paymentFrequency;
+    }
+
+    public void setContractAmount(Double contractAmount) {
+        this.contractAmount = contractAmount;
+    }
+
+    public void setPaidAmount(Double paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+
+    public void setOutstandingAmount(Double outstandingAmount) {
+        this.outstandingAmount = outstandingAmount;
+    }
+
+    public void setLastPaymentDate(LocalDate lastPaymentDate) {
+        this.lastPaymentDate = lastPaymentDate;
+    }
+
+    public void setStartAmount(Double startAmount) {
+        this.startAmount = startAmount;
+    }
+
+    public void setFee(int fee) {
+        this.fee = fee;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setCashkickIds(List<Long> cashkickIds) {
+        this.cashkickIds = cashkickIds;
+    }
 }
