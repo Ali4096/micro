@@ -67,4 +67,124 @@ public class ContractDTO {
         INACTIVE,
         PENDING,
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getContractName() {
+        return contractName;
+    }
+
+    public String getContractType() {
+        return contractType;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public String getPaymentFrequency() {
+        return paymentFrequency;
+    }
+
+    public Double getContractAmount() {
+        return contractAmount;
+    }
+
+    public Double getPaidAmount() {
+        return paidAmount;
+    }
+
+    public Double getOutstandingAmount() {
+        return outstandingAmount;
+    }
+
+    public LocalDate getLastPaymentDate() {
+        return lastPaymentDate;
+    }
+
+    public Double getStartAmount() {
+        return startAmount;
+    }
+
+    public int getFee() {
+        return fee;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public List<Long> getCashkickIds() {
+        return cashkickIds;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setContractName(String contractName) {
+        this.contractName = contractName;
+    }
+
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setPaymentFrequency(String paymentFrequency) {
+        this.paymentFrequency = paymentFrequency;
+    }
+
+    public void setContractAmount(Double contractAmount) {
+        this.contractAmount = contractAmount;
+    }
+
+    public void setPaidAmount(Double paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+
+    public void setOutstandingAmount(Double outstandingAmount) {
+        this.outstandingAmount = outstandingAmount;
+    }
+
+    public void setLastPaymentDate(LocalDate lastPaymentDate) {
+        this.lastPaymentDate = lastPaymentDate;
+    }
+
+    public void setStartAmount(Double startAmount) {
+        this.startAmount = startAmount;
+    }
+
+    public void setFee(int fee) {
+        this.fee = fee;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setCashkickIds(List<Long> cashkickIds) {
+        this.cashkickIds = cashkickIds;
+    }
 }

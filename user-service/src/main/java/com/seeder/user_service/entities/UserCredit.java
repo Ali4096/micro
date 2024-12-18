@@ -23,4 +23,36 @@ public class UserCredit {
     private Double allotted;
 
     private Double balance;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Double getAllotted() {
+        return allotted;
+    }
+
+    public void setAllotted(Double allotted) {
+        this.allotted = allotted;
+    }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
 }

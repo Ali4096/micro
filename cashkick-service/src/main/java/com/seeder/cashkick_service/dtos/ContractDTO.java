@@ -70,7 +70,63 @@ public class ContractDTO {
         PENDING,
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public String getContractName() {
+        return contractName;
+    }
+
+    public String getContractType() {
+        return contractType;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public String getPaymentFrequency() {
+        return paymentFrequency;
+    }
+
     public Double getContractAmount() {
         return contractAmount;
+    }
+
+    public Double getPaidAmount() {
+        return paidAmount;
+    }
+
+    public Double getOutstandingAmount() {
+        return outstandingAmount;
+    }
+
+    public LocalDate getLastPaymentDate() {
+        return lastPaymentDate;
+    }
+
+    public Double getStartAmount() {
+        return startAmount;
+    }
+
+    public int getFee() {
+        return fee;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public List<Long> getCashkickIds() {
+        return cashkickIds;
     }
 }

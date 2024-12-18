@@ -9,4 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserWithOnlyIdDTO {
     private Long id;
+
+    public Long getId() {
+        return id;
+    }
 }

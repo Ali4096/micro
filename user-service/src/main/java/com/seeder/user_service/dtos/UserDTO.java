@@ -25,5 +25,47 @@ public class UserDTO {
 //    private String password;
 
     private UserCredit userCredit;  // Nested DTO
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public UserCredit getUserCredit() {
+        return userCredit;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUserCredit(UserCredit userCredit) {
+        this.userCredit = userCredit;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", userCredit=" + userCredit +
+                '}';
+    }
 }
 

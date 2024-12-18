@@ -1,21 +1,20 @@
 package com.seeder.user_service.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-import java.util.HashMap;
-import java.util.Map;
-
-@Data
-@AllArgsConstructor
 public class ErrorResponse {
     private int statusCode;
     private String message;
-    private Map<String,String> fieldErrors = new HashMap<>();
 
-
+    // Constructor, getters and setters
     public ErrorResponse(int statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

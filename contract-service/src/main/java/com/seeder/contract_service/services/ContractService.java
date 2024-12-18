@@ -8,6 +8,7 @@ import com.seeder.contract_service.repositories.ContractRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +27,8 @@ public class ContractService {
         // Convert CreateContractDTO to Contract entity
         Contract contract = modelMapper.map(createContractDTO, Contract.class);
 
-        // Handle enum conversion (if not done in DTO)
-        contract.setStatus(Contract.Status.valueOf(createContractDTO.getContractStatus()));
+//        // Handle enum conversion (if not done in DTO)
+//        contract.setStatus(Contract.Status.valueOf(createContractDTO.getContractStatusAsEnum());
 
         // Save the contract to the database
         Contract savedContract = contractRepository.save(contract);
@@ -64,4 +65,48 @@ public class ContractService {
         });
         contractRepository.saveAll(contracts);
     }
+
+
+    public List<ContractDTO> validateAndReturnContracts(List<Long> contractIds) {
+        List<ContractDTO> contractDTOS = new ArrayList<>();
+        // Loop through each contract ID
+        for (Long id : contractIds) {
+            // Retrieve the contract by ID from the repository
+            Optional<Contract> contractOptional = contractRepository.findById(id);
+
+            // Check if the contract exists
+            if (contractOptional.isEmpty()) {
+                throw new IllegalArgumentException("Contract with ID " + id + " does not exist.");
+            }
+
+            Contract contract = contractOptional.get();
+
+            // Add your custom validation logic here (e.g., check status, amount, etc.)
+            if (contract.getStatus().equals(Contract.Status.PENDING) || contract.getStatus().equals(Contract.Status.INACTIVE)) {
+                throw new IllegalArgumentException("Contract with ID " + id + " is not in a valid status.");
+            }
+            contractDTOS.add(modelMapper.map(contract,ContractDTO.class));
+        }
+        return contractDTOS;
+    }
+
+    public void makeAllContractsPending(List<Long> contractIds) {
+        System.out.println("Contract " + contractIds.toString());
+        // Find all contracts by their IDs
+        List<Contract> contracts = contractRepository.findAllById(contractIds);
+
+        // Check if all contracts exist
+        if (contracts.isEmpty()) {
+            throw new IllegalArgumentException("No contracts found for the given IDs.");
+        }
+
+        // Update the status of each contract to 'PENDING'
+        for (Contract contract : contracts) {
+            contract.setStatus(Contract.Status.PENDING);  // Assuming `setStatus()` is the method to update the status
+        }
+
+        // Save the updated contracts
+        contractRepository.saveAll(contracts);
+    }
+
 }

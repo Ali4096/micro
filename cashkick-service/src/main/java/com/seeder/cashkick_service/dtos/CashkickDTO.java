@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -35,6 +33,33 @@ public class CashkickDTO {
     @NotNull(message = "contracts cannot be null")
     private List<Long> contractIds;  // List of contract IDs, no need to map full ContractDTOs
 
+    public String getCashkickName() {
+        return cashkickName;
+    }
+
+    public String getCashkickStatus() {
+        return cashkickStatus;
+    }
+
+    public String getMaturityDate() {
+        return maturityDate;
+    }
+
+    public Double getTotalReceived() {
+        return totalReceived;
+    }
+
+    public Integer getTermLength() {
+        return termLength;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public List<Long> getContractIds() {
+        return contractIds;
+    }
 
 //
 //    // Utility method to convert Enum to String
