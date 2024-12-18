@@ -23,9 +23,9 @@ public class CashkickController {
 
     @PostMapping
     public ResponseEntity<String> createCashKick(@RequestBody CashkickDTO cashkickDTO) {
-        log.info("Received request to create CashKick: {}", cashkickDTO);
+//        log.info("Received request to create CashKick: {}", cashkickDTO);
         cashkickService.createCashKick(cashkickDTO);
-        log.info("CashKick created successfully for: {}", cashkickDTO);
+//        log.info("CashKick created successfully for: {}", cashkickDTO);
         return ResponseEntity.ok("CashKick created successfully.");
     }
 }

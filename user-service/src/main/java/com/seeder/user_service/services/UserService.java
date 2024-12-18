@@ -30,25 +30,26 @@ public class UserService {
     public User registerUser(UserDTO userDTO) {
         // Validate the username here, instead of in the controller
         if (userDTO.getUsername() == null || userDTO.getUsername().trim().isEmpty()) {
-            log.info("Username is required");
+//            log.info("Username is required");
             throw new IllegalArgumentException("Username is required");
         }
 
         // Check if the username or email already exists
         Optional<User> existingUserByUserName = userRepository.findByUsername(userDTO.getUsername());
         if (existingUserByUserName.isPresent()) {
-            log.info("User with username {} already exists", userDTO.getUsername());
+//            log.info("User with username {} already exists", userDTO.getUsername());
             throw new UserAlreadyExistException("User Name already exists");
         }
 
         Optional<User> existingUserByEmail = userRepository.findByEmail(userDTO.getEmail());
         if (existingUserByEmail.isPresent()) {
-            log.info("User with email {} already exists", userDTO.getEmail());
+//            log.info("User with email {} already exists", userDTO.getEmail());
             throw new UserAlreadyExistException("Email already exists");
         }
 
         // If validation passed, map UserDTO to User entity and save it
         User user = modelMapper.map(userDTO, User.class);
+        System.out.println("User" + user.toString());
 
         // Ensure UserCredit is set properly
         UserCredit userCredit = user.getUserCredit();
@@ -61,7 +62,7 @@ public class UserService {
             // Persist the User and ensure that cascading works properly
             return userRepository.save(user); // This should save both User and UserCredit due to CascadeType.ALL
         } catch (Exception e) {
-            log.error("Unexpected error while saving user", e);
+//            log.error("Unexpected error while saving user", e);
             throw new ServiceException("Some unexpected error occurred");
         }
 

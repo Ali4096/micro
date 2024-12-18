@@ -30,11 +30,13 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+        System.out.println(userDTO.toString());
         // Call the service to register the user
         User createdUser = userService.registerUser(userDTO);
 
         // Map the User entity back to a UserDTO
         UserDTO createdUserDTO = modelMapper.map(createdUser, UserDTO.class);
+        System.out.println("Created" + createdUserDTO.toString());
 
         // Return the response entity with status 201 Created
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUserDTO);

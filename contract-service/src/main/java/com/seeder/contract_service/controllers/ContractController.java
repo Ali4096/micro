@@ -24,7 +24,7 @@ public class ContractController {
 
     @PostMapping
     public ResponseEntity<CreateContractDTO> createContract(@Valid @RequestBody CreateContractDTO createContractDTO){
-        log.info("Inside Contract Controller create contract method");
+//        log.info("Inside Contract Controller create contract method");
         // Call the service layer to create the contract using the provided DTO
         CreateContractDTO createdContract = contractService.createContract(createContractDTO);
 

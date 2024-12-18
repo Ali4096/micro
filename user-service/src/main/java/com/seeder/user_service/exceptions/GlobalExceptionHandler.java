@@ -31,8 +31,8 @@ public class GlobalExceptionHandler {
             errors.put(fieldName,message);
         }
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),"Validation failed",errors
-        );
+                HttpStatus.BAD_REQUEST.value(),"Validation failed");
+
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 

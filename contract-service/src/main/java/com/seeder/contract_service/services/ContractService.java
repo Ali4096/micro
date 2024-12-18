@@ -27,8 +27,8 @@ public class ContractService {
         // Convert CreateContractDTO to Contract entity
         Contract contract = modelMapper.map(createContractDTO, Contract.class);
 
-        // Handle enum conversion (if not done in DTO)
-        contract.setStatus(Contract.Status.valueOf(createContractDTO.getContractStatus()));
+//        // Handle enum conversion (if not done in DTO)
+//        contract.setStatus(Contract.Status.valueOf(createContractDTO.getContractStatusAsEnum());
 
         // Save the contract to the database
         Contract savedContract = contractRepository.save(contract);

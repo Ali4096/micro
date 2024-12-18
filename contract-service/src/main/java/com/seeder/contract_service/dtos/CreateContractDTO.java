@@ -97,5 +97,109 @@ public class CreateContractDTO {
     public LocalDate getLastPaymentDateAsEntity() {
         return this.lastPaymentDate == null ? null : LocalDate.parse(this.lastPaymentDate, DateTimeFormatter.ISO_LOCAL_DATE);
     }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getContractName() {
+        return contractName;
+    }
+
+    public void setContractName(String contractName) {
+        this.contractName = contractName;
+    }
+
+    public String getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
+    }
+
+    public String getContractStatus() {
+        return contractStatus;
+    }
+
+    public void setContractStatus(String contractStatus) {
+        this.contractStatus = contractStatus;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getPaymentFrequency() {
+        return paymentFrequency;
+    }
+
+    public void setPaymentFrequency(String paymentFrequency) {
+        this.paymentFrequency = paymentFrequency;
+    }
+
+    public Double getContractAmount() {
+        return contractAmount;
+    }
+
+    public void setContractAmount(Double contractAmount) {
+        this.contractAmount = contractAmount;
+    }
+
+    public Double getPaidAmount() {
+        return paidAmount;
+    }
+
+    public void setPaidAmount(Double paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+
+    public Double getOutstandingAmount() {
+        return outstandingAmount;
+    }
+
+    public void setOutstandingAmount(Double outstandingAmount) {
+        this.outstandingAmount = outstandingAmount;
+    }
+
+    public String getLastPaymentDate() {
+        return lastPaymentDate;
+    }
+
+    public void setLastPaymentDate(String lastPaymentDate) {
+        this.lastPaymentDate = lastPaymentDate;
+    }
+
+    public Double getStartAmount() {
+        return startAmount;
+    }
+
+    public void setStartAmount(Double startAmount) {
+        this.startAmount = startAmount;
+    }
+
+    public int getFee() {
+        return fee;
+    }
+
+    public void setFee(int fee) {
+        this.fee = fee;
+    }
 }
 

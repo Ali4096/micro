@@ -19,5 +19,20 @@ public class UserCreditDTO {
     @Min(value = 0, message = "Balance must be at least 0")
     private Double balance;
 
+    public Double getAllotted() {
+        return allotted;
+    }
 
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setAllotted(Double allotted) {
+        this.allotted = allotted;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
 }
+
