@@ -10,6 +10,6 @@ public interface UserClient {
 //    User getUserById(@PathVariable Long id);
 
 
-    
+
     //just wnt to push
 }

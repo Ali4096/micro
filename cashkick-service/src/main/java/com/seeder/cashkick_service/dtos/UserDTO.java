@@ -9,7 +9,6 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 @Data
-@AllArgsConstructor
 @Getter
 @Setter
 public class UserDTO {

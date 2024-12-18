@@ -28,5 +28,6 @@ public class CashkickController {
 //        log.info("CashKick created successfully for: {}", cashkickDTO);
         return ResponseEntity.ok("CashKick created successfully.");
     }
+
 }
 

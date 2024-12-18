@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class ContractDTO {
 
-    private Integer id; // Typically no validation for ID, as it's auto-generated
+    private Long id; // Typically no validation for ID, as it's auto-generated
 
     @NotBlank(message = "Contract name is required.")
     @Size(max = 100, message = "Contract name cannot exceed 100 characters.")
@@ -68,7 +68,7 @@ public class ContractDTO {
         PENDING,
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -128,7 +128,7 @@ public class ContractDTO {
         return cashkickIds;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

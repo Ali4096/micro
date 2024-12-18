@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/contracts")
@@ -32,6 +34,21 @@ public class ContractController {
         return new ResponseEntity<>(createdContract, HttpStatus.CREATED);
     }
 
+    @GetMapping("/validate")
+    public ResponseEntity<List<ContractDTO>> validateContracts(@RequestParam("contractIds") List<Long> contractIds) {
+        List<ContractDTO>  contractDTOS = contractService.validateAndReturnContracts(contractIds);
+        return ResponseEntity.ok(contractDTOS);
+    }
+
+    @PostMapping("/make-pending")
+    public ResponseEntity<String> makeAllContractsPending(@RequestParam("contractIds") List<Long> contractIds) {
+        // Call the service method to update the contract statuses to 'PENDING'
+        contractService.makeAllContractsPending(contractIds);
+
+        // Return a success message with status OK (200)
+        return ResponseEntity.ok("All contracts have been successfully marked as pending.");
+    }
+
     @GetMapping("/{contractId}")
     public ResponseEntity<ContractDTO> getContractById(@PathVariable("contractId") Long contractId) {
         try {
@@ -42,13 +59,13 @@ public class ContractController {
         }
     }
 
-    public ResponseEntity<?> getAllContractByUserId(@PathVariable("userId") Long userId){
-        return null;
-    }
-
-    public ResponseEntity<?> updateContractStatus(){
-        return null;
-    }
+//    public ResponseEntity<?> getAllContractByUserId(@PathVariable("userId") Long userId){
+//        return null;
+//    }
+//
+//    public ResponseEntity<?> updateContractStatus(){
+//        return null;
+//    }
 
 }
 

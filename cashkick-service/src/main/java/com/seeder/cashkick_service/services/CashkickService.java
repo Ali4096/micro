@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class CashkickService {
 
     private final UserClient userClient;
-
     private final ContractClient contractClient;
     private final ModelMapper modelMapper;
     private final CashkickRepository cashkickRepository;
