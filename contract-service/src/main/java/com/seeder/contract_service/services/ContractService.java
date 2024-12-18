@@ -82,7 +82,7 @@ public class ContractService {
             Contract contract = contractOptional.get();
 
             // Add your custom validation logic here (e.g., check status, amount, etc.)
-            if (!contract.getStatus().equals("PENDING")) {
+            if (contract.getStatus().equals(Contract.Status.PENDING) || contract.getStatus().equals(Contract.Status.INACTIVE)) {
                 throw new IllegalArgumentException("Contract with ID " + id + " is not in a valid status.");
             }
             contractDTOS.add(modelMapper.map(contract,ContractDTO.class));
@@ -91,6 +91,7 @@ public class ContractService {
     }
 
     public void makeAllContractsPending(List<Long> contractIds) {
+        System.out.println("Contract " + contractIds.toString());
         // Find all contracts by their IDs
         List<Contract> contracts = contractRepository.findAllById(contractIds);
 

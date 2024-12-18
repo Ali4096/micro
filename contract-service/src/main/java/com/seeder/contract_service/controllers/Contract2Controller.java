@@ -8,9 +8,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("contract-service")
+@RestController
 public class Contract2Controller {
     ContractService contractService;
+
+    public Contract2Controller(ContractService contractService) {
+        this.contractService = contractService;
+    }
+
     @GetMapping("/contracts/validate")
     ResponseEntity<List<ContractDTO>> validateContracts(@RequestParam("contractIds") List<Long> contractIds) {
         List<ContractDTO>  contractDTOS = contractService.validateAndReturnContracts(contractIds);
