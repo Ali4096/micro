@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
             errors.put(fieldName,message);
         }
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),"Validation failed"
+                HttpStatus.BAD_REQUEST.value(),"Validation failed",errors
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -46,14 +46,39 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ContractAlreadyAttachedException.class)
     public ResponseEntity<ErrorResponse> handleContractAlreadyAttachedException(ContractAlreadyAttachedException ex){
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(), ex.getMessage()
+                HttpStatus.CONFLICT.value(), ex.getMessage()
         );
-        return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(ContractAlreadyPendingException.class)
+    public ResponseEntity<ErrorResponse> handleContractAlreadyPendingException(ContractAlreadyPendingException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.CONFLICT.value(), ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
 
     // Handle IllegalArgumentException
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(), ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex){
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AmountExhaustedException.class)
+    public ResponseEntity<ErrorResponse> handleAmountExhaustedException(AmountExhaustedException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(), ex.getMessage()
         );

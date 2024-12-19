@@ -3,6 +3,7 @@ package com.seeder.contract_service.services;
 import com.seeder.contract_service.dtos.ContractDTO;
 import com.seeder.contract_service.dtos.CreateContractDTO;
 import com.seeder.contract_service.entities.Contract;
+import com.seeder.contract_service.exceptions.ContractAlreadyPendingException;
 import com.seeder.contract_service.exceptions.ContractNotFoundException;
 import com.seeder.contract_service.repositories.ContractRepository;
 import org.modelmapper.ModelMapper;
@@ -91,22 +92,33 @@ public class ContractService {
     }
 
     public void makeAllContractsPending(List<Long> contractIds) {
-        System.out.println("Contract " + contractIds.toString());
+        System.out.println("Contract IDs: " + contractIds.toString());
+
         // Find all contracts by their IDs
         List<Contract> contracts = contractRepository.findAllById(contractIds);
 
-        // Check if all contracts exist
+        // Check if any contracts exist
         if (contracts.isEmpty()) {
             throw new IllegalArgumentException("No contracts found for the given IDs.");
         }
 
+        // Check if any contract is already in 'PENDING' status
+        for (Contract contract : contracts) {
+            if (contract.getStatus() == Contract.Status.PENDING) { // Assuming `getStatus()` fetches the status
+                throw new ContractAlreadyPendingException(
+                        "Contract with ID " + contract.getId() + " is already in PENDING status."
+                );
+            }
+        }
+
         // Update the status of each contract to 'PENDING'
         for (Contract contract : contracts) {
-            contract.setStatus(Contract.Status.PENDING);  // Assuming `setStatus()` is the method to update the status
+            contract.setStatus(Contract.Status.PENDING); // Update status to PENDING
         }
 
         // Save the updated contracts
         contractRepository.saveAll(contracts);
     }
+
 
 }

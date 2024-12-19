@@ -61,10 +61,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AmountExhaustedException.class)
-    public ResponseEntity<ErrorResponse> handleAmountExhaustedException(UserNotFoundException ex){
+    public ResponseEntity<ErrorResponse> handleAmountExhaustedException(AmountExhaustedException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),ex.getMessage()
+                HttpStatus.BAD_REQUEST.value(), ex.getMessage()
         );
-        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
 }

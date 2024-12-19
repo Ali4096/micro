@@ -14,12 +14,13 @@ import java.util.Optional;
 @Service
 public class UserCreditService {
 
-    @Autowired
     private UserCreditRepository userCreditRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
+    public UserCreditService(UserCreditRepository userCreditRepository, UserRepository userRepository) {
+        this.userCreditRepository = userCreditRepository;
+        this.userRepository = userRepository;
+    }
 
     public UserCredit isCreditSufficient(long userId, double amount) {
         // Fetch user details
